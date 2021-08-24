@@ -5,7 +5,7 @@ namespace Options
     [Verb("init",isDefault:true,HelpText = "Initialize .gitignore file")]
     public class InitOption
     {
-        [Value(0,Required=true,HelpText="Create .gitignore file with given template")]
+        [Value(0,Required=true,HelpText="Create .gitignore file with given template",MetaName="Template Name",MetaValue="csharp")]
         public string Template { get; set; }
     }
 
