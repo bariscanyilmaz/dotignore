@@ -51,7 +51,8 @@ namespace Services
             Console.WriteLine($"Name".PadRight(15) + "Aliases".PadRight(15) + "Description");
             results.ForEach((template) =>
             {
-                Console.WriteLine($"{template.Name}".PadRight(15) + string.Join(',', template.Aliases).PadRight(15) + template.Description);
+                Console.WriteLine($"{template.Name.PadRight(15)  }" + string.Join(',', template.Aliases).PadRight(15) + $".gitignore template for {template.Description} projects");
+
             });
 
         }
