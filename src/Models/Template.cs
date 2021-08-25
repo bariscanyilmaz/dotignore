@@ -137,11 +137,6 @@ namespace Models
                 repoUrl:"Maven"
             ),
             new Template(
-                name:"node",
-                aliases:new string []{"js","nodejs"},
-                repoUrl:"Node"
-            ),
-            new Template(
                 name:"objective-c",
                 aliases:new string []{"objective-c"},
                 repoUrl:"Objective-C"
