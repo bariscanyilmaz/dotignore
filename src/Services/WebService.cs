@@ -1,9 +1,10 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using Services.Abstract;
 
 namespace Services
 {
-    public class WebService
+    public class WebService:IWebService
     {
         private readonly HttpClient _httpClient;
         private string baseURL(string template) => $"https://raw.githubusercontent.com/github/gitignore/master/{template}.gitignore";

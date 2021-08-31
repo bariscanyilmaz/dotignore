@@ -3,6 +3,7 @@ using Services;
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Services.Abstract;
 
 namespace dotignore
 {
@@ -11,18 +12,30 @@ namespace dotignore
         static void Main(string[] args)
         {
             var services = new ServiceCollection();
-            services.AddHttpClient<WebService>();
-            services.AddTransient<FileService>();
-            services.AddTransient<TemplateService>();
+            services.AddHttpClient<IWebService, WebService>();
+            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<ITemplateService, TemplateService>();
             var serviceProvider = services.BuildServiceProvider();
 
-            var templateService = serviceProvider.GetService<TemplateService>();
+            var templateService = serviceProvider.GetService<ITemplateService>();
+            var fileService = serviceProvider.GetService<IFileService>();
+            var webService = serviceProvider.GetService<IWebService>();
 
             Parser.Default.ParseArguments<InitOption, ListOption>(args)
-            .WithParsedAsync<InitOption>(async options => await templateService.InitializeTemplateAsync(options)).GetAwaiter().GetResult()
+            .WithParsedAsync<InitOption>(async options =>
+            {
+                var template = templateService.FindTemplate(options);
+                if (template != null)
+                {
+                    var result= await webService.GetTemplateAsync(template.RepoURL);
+                    var content=await result.Content.ReadAsStringAsync()??string.Empty;
+                    await fileService.CreateIgnoreFileAsync(content);
+                }
+
+            }).GetAwaiter().GetResult()
             .WithParsed<ListOption>(options =>
             {
-                var results= templateService.ListTemplates(options);
+                var results = templateService.ListTemplates(options);
                 Console.WriteLine($"Name".PadRight(15) + "Aliases".PadRight(15));
                 results.ForEach((template) =>
                 {
