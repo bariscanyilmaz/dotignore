@@ -9,13 +9,12 @@ namespace Services
         private string baseURL(string template) => $"https://raw.githubusercontent.com/github/gitignore/master/{template}.gitignore";
         public WebService(HttpClient client)
         {
-            _httpClient=client;
+            _httpClient = client;
         }
 
-        public async Task<string> GetTemplateAsync(string template)
+        public async Task<HttpResponseMessage> GetTemplateAsync(string template)
         {
-            var res = await _httpClient.GetAsync(baseURL(template));
-            return await res.Content.ReadAsStringAsync();
+            return await _httpClient.GetAsync(baseURL(template)); 
         }
 
     }

@@ -28,7 +28,8 @@ namespace Services
 
             if (result != null)
             {
-                var content = await _webService.GetTemplateAsync(result.RepoURL);
+                var response = await _webService.GetTemplateAsync(result.RepoURL);
+                var content=await response.Content.ReadAsStringAsync()??string.Empty;
                 await _fileService.CreateIgnoreFileAsync(content);
 
                 return 1;
@@ -36,7 +37,7 @@ namespace Services
             return -1;
         }
 
-        public void ListTemplates(ListOption option)
+        public List<Template> ListTemplates(ListOption option)
         {
             List<Template> results = Repository.Templates;
 
@@ -48,11 +49,9 @@ namespace Services
                 .ToList();
             }
 
-            Console.WriteLine($"Name".PadRight(15) + "Aliases".PadRight(15));
-            results.ForEach((template) =>
-            {
-                Console.WriteLine($"{template.Name.PadRight(15)  }" + string.Join(',', template.Aliases).PadRight(15));
-            });
+
+            return results;
+            
 
         }
     }
