@@ -4,7 +4,7 @@ using Services.Abstract;
 
 namespace Services
 {
-    public class WebService:IWebService
+    public class WebService : IWebService
     {
         private readonly HttpClient _httpClient;
         private string baseURL(string template) => $"https://raw.githubusercontent.com/github/gitignore/master/{template}.gitignore";
@@ -15,7 +15,7 @@ namespace Services
 
         public async Task<string> GetTemplateAsync(string template)
         {
-            return await _httpClient.GetStringAsync(baseURL(template)); 
+            return await _httpClient.GetStringAsync(baseURL(template));
         }
 
     }
