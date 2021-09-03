@@ -27,9 +27,8 @@ namespace dotignore
                 var template = templateService.FindTemplate(options);
                 if (template != null)
                 {
-                    var result= await webService.GetTemplateAsync(template.RepoURL);
-                    var content=await result.Content.ReadAsStringAsync()??string.Empty;
-                    await fileService.CreateIgnoreFileAsync(content);
+                    var result = await webService.GetTemplateAsync(template.RepoURL) ?? string.Empty;
+                    await fileService.CreateIgnoreFileAsync(result);
                 }
 
             }).GetAwaiter().GetResult()

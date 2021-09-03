@@ -13,9 +13,9 @@ namespace Services
             _httpClient = client;
         }
 
-        public async Task<HttpResponseMessage> GetTemplateAsync(string template)
+        public async Task<string> GetTemplateAsync(string template)
         {
-            return await _httpClient.GetAsync(baseURL(template)); 
+            return await _httpClient.GetStringAsync(baseURL(template)); 
         }
 
     }

@@ -5,7 +5,7 @@ namespace Services.Abstract
 {
     public interface IWebService
     {
-        Task<HttpResponseMessage> GetTemplateAsync(string template);
+        Task<string> GetTemplateAsync(string template);
 
     }
 }
