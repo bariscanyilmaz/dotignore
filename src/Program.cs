@@ -4,6 +4,7 @@ using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Services.Abstract;
+using System.IO.Abstractions;
 
 namespace dotignore
 {
@@ -13,6 +14,7 @@ namespace dotignore
         {
             var services = new ServiceCollection();
             services.AddHttpClient<IWebService, WebService>();
+            services.AddTransient<IFileSystem,FileSystem>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ITemplateService, TemplateService>();
             var serviceProvider = services.BuildServiceProvider();
