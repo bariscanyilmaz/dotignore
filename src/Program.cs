@@ -14,7 +14,7 @@ namespace dotignore
         {
             var services = new ServiceCollection();
             services.AddHttpClient<IWebService, WebService>();
-            services.AddTransient<IFileSystem,FileSystem>();
+            services.AddTransient<IFileSystem, FileSystem>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ITemplateService, TemplateService>();
             var serviceProvider = services.BuildServiceProvider();
@@ -30,7 +30,14 @@ namespace dotignore
                 if (template != null)
                 {
                     var result = await webService.GetTemplateAsync(template.RepoURL) ?? string.Empty;
-                    await fileService.CreateIgnoreFileAsync(result);
+                    if (fileService.IsExist() && options.IsAppend)
+                    {
+                        await fileService.AppendIgnoreFileAsync(result);
+                    }
+                    else
+                    {
+                        await fileService.CreateIgnoreFileAsync(result);
+                    }
                 }
 
             }).GetAwaiter().GetResult()
