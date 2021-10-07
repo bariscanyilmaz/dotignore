@@ -32,6 +32,41 @@ namespace dotignore.test
         }
 
         [Fact]
+
+        public async Task CreateIgnoreFileAsync_ShouldCreate_WhenFileNotExist()
+        {
+            //Arrange
+            string path=".gitignore";
+            string content="content";
+            var fs=new MockFileSystem();
+            var fileService=new FileService(fs);
+            //Act
+            await fileService.CreateIgnoreFileAsync(content);
+            //Assert
+            var expected="content";
+            Assert.Equal(expected,fs.File.ReadAllText(path));
+        }
+
+        [Fact]
+        public async Task CreateIgnoreFileAsync_ShouldOverwrite_WhenFileExist()
+        {
+            //Arrange
+            string path=".gitignore",existedContent="exsited",content="content";
+            
+            var fs=new MockFileSystem();
+            fs.AddFile(path,new MockFileData(existedContent));
+
+            var fileService=new FileService(fs);
+            //Act
+            await fileService.CreateIgnoreFileAsync(content);
+            //Assert
+            var expected="content";
+
+            Assert.Equal(expected,fs.File.ReadAllText(path));
+            Assert.NotEqual(existedContent,fs.File.ReadAllText(path));
+        }
+
+        [Fact]
         public async Task AppendIgnoreFileAsync_ShouldAppend_WhenCalled()
         {
             string path = ".gitignore";
