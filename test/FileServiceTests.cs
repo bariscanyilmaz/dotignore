@@ -56,5 +56,27 @@ namespace dotignore.test
             var expected = $"{Environment.NewLine}content";
             Assert.Equal(fs.File.ReadAllText(path), expected);
         }
+
+        [Fact]
+        public void IsExist_ShouldReturnTrue_WhenFileExist()
+        {
+            string path = ".gitignore";
+            var fs = new MockFileSystem();
+            fs.AddFile(path,null);
+            var fileService = new FileService(fs);
+
+            var actual=fileService.IsExist();
+
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void IsExist_ShouldReturnFalse_WhenFileNotExist()
+        {
+            var fs = new MockFileSystem();   
+            var fileService = new FileService(fs);
+            var actual=fileService.IsExist();
+            Assert.False(actual);
+        }
     }
 }
