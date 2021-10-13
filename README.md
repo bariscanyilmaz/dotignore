@@ -18,7 +18,7 @@ export PATH=$PATH:/usr/local/dotignore
 
 ### Create .gitignore files
 
-Create your dotignore files with init verb
+Create your .gitignore files with `init` verb
 
 ```bash
 dotignore init <template>
@@ -26,7 +26,7 @@ dotignore init <template>
 
 ![dotignore-init-value](https://user-images.githubusercontent.com/30300440/130862256-998b5e65-8f01-4e98-8e60-a729f30ff91e.gif)  
 
-Also, init is defeault verb and you can omit it
+Also, init is a defeault verb and you can omit it
 
 ```bash
 dotignore <template>
@@ -34,9 +34,15 @@ dotignore <template>
 
 ![dotignore-value](https://user-images.githubusercontent.com/30300440/130862290-a9182421-0168-4d8e-a697-a7c5be2ac1a9.gif)  
 
+When you use init verb be careful, it creates a new or overwrite existing .gitignore file. If you want to just add new template to existing one, add `--append` or `-a` option.
+
+```bash
+dotignore dotnet --append
+```
+
 ### List available .gitignore templates
 
-List your dotignore files with ls verb
+List your dotignore files with `ls` verb
 
 ```bash
 dotignore ls 
@@ -44,7 +50,7 @@ dotignore ls
 
 ![dotignore-ls](https://user-images.githubusercontent.com/30300440/130862328-38127d04-3aa1-45bd-a4d0-2117dc1fef18.gif)  
 
-Also, ls has -q or --query option for searching your template
+Also, ls has `-q` or `--query` option for searching your template
 
 ```bash
 dotignore ls -q <template>
