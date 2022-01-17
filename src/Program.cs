@@ -3,6 +3,7 @@ using Services;
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using Services.Abstract;
 using System.IO.Abstractions;
 
@@ -43,7 +44,7 @@ namespace dotignore
             }).GetAwaiter().GetResult()
             .WithParsed<ListOption>(options =>
             {
-                var results = templateService.ListTemplates(options);
+                var results = templateService.ListTemplates(options).ToList();
                 Console.WriteLine($"Name".PadRight(15) + "Aliases".PadRight(15));
                 results.ForEach((template) =>
                 {
