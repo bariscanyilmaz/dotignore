@@ -1,6 +1,7 @@
 using Options;
 using Services;
 using Xunit;
+using System.Linq;
 using System.Collections.Generic;
 using Models;
 
@@ -8,16 +9,37 @@ namespace dotignore.test
 {
     public class TemplateServiceTests
     {
-        [Fact]
-        public void FindTemplate_ShouldReturnTemplate_WhenTemplateIsFound()
+        [Theory]
+        [InlineData("c","c")]
+        [InlineData("go","go")]
+        [InlineData("golang","go")]
+        [InlineData("dotnet","csharp")]
+        public void FindTemplate_ShouldReturnTemplate_WhenTemplateIsFound(string query,string expected)
         {
 
             var templateService = new TemplateService();
-            var option = new InitOption() { Template = "csharp" };
+            var option = new InitOption() { Template = query };
 
             var result = templateService.FindTemplate(option);
             
-            Assert.Equal("csharp",result.Name);
+            Assert.Equal(expected,result.Name);
+
+        }
+
+        [Theory]
+        [InlineData("asd")]
+        [InlineData("ff")]
+        [InlineData("cart")]
+        [InlineData("curt")]
+        public void FindTemplate_ShouldReturnNull_WhenTemplateNotFound(string query)
+        {
+
+            var templateService = new TemplateService();
+            var option = new InitOption() { Template = query };
+
+            var result = templateService.FindTemplate(option);
+            
+            Assert.Null(result);
 
         }
 
@@ -27,9 +49,9 @@ namespace dotignore.test
             var templateService=new TemplateService();
             var option=new ListOption(){Query=null};
 
-            List<Template> result= templateService.ListTemplates(option);
+            var result= templateService.ListTemplates(option);
 
-            Assert.Equal(Repository.Templates.Count,result.Count);
+            Assert.Equal(Repository.Templates.ToList().Count,result.ToList().Count);
         }
 
         [Fact]
@@ -38,7 +60,7 @@ namespace dotignore.test
             var templateService=new TemplateService();
             var option=new ListOption(){Query="invalid option"};
 
-            List<Template> result= templateService.ListTemplates(option);
+            List<Template> result= templateService.ListTemplates(option).ToList();
 
             Assert.Empty(result);
         }
@@ -55,7 +77,7 @@ namespace dotignore.test
             var templateService=new TemplateService();
             var option=new ListOption(){Query=query};
 
-            List<Template> result= templateService.ListTemplates(option);
+            List<Template> result= templateService.ListTemplates(option).ToList();
 
             Assert.Equal(expected,result.Count);
         }
