@@ -4,22 +4,26 @@ namespace Models
 {
     public class Template
     {
-        public Template(string name, string[] aliases, string repoUrl)
+        public Template(string name, string[] aliases, string repoUrl,float rate=0)
         {
             Name = name;
             Aliases = aliases;
             RepoURL = repoUrl;
-
+            Rate=rate;
         }
 
         public string Name { get; }
         public string[] Aliases { get; }
         public string RepoURL { get; }
+        public float Rate { get; set; }
+
+
+        
     }
 
     public class Repository
     {
-        public static readonly List<Template> Templates = new List<Template>()
+        public static readonly IEnumerable<Template> Templates = new List<Template>()
         {
             new Template(
                 name:"csharp",
