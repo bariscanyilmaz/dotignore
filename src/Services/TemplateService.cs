@@ -7,33 +7,50 @@ using System;
 using Services.Abstract;
 namespace Services
 {
-    public class TemplateService:ITemplateService
+    public class TemplateService : ITemplateService
     {
         public Template FindTemplate(InitOption option)
         {
 
-            return Repository.Templates
-            .Where(x => x.Name.Contains(option.Template.ToLower()) ||
-             x.Aliases.Contains(option.Template.ToLower()))
-            .FirstOrDefault();       
+            return Repository.Templates.Select(x => new Template(x.Name, x.Aliases, x.RepoURL, CalculateRate(x, option.Template))).Where(x => x.Rate > 0)
+            .OrderByDescending(x => x.Rate)
+            .FirstOrDefault();
         }
 
-        public List<Template> ListTemplates(ListOption option)
+        public IEnumerable<Template> ListTemplates(ListOption option)
         {
-            List<Template> results = Repository.Templates;
+            var results = Repository.Templates;
 
             if (!string.IsNullOrEmpty(option.Query))
             {
-                results = results.Where(
-                    x => x.Name.Contains(option.Query.ToLower()) ||
-                    x.Aliases.Contains(option.Query.ToLower()))
-                .ToList();
+                results = results.Select(
+                  x => new Template(
+                      x.Name,
+                      x.Aliases,
+                      x.RepoURL,
+                      CalculateRate(x, option.Query)
+                      )
+                ).OrderByDescending(x => x.Rate).Where(x => x.Rate > 0);
             }
 
-
             return results;
-            
 
+        }
+
+        float CalculateRate(Template template, string query)
+        {
+            float rate = 0f;
+
+            if (template.Name.ToLower().Contains(query.ToLower()))
+            {
+                rate += ((float)query.Count() / (float)template.Name.Count());
+            }
+            else if (template.Aliases.Select(x => x.ToLower()).Contains(query.ToLower()))
+            {
+                rate += (float)query.Count() / (float)template.Aliases.Select(x => x.Count()).Sum();
+            }
+
+            return rate;
         }
     }
 }
